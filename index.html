@@ -27,11 +27,12 @@ function update(msg){
 }
 
 function showGB(){
-	showGBnode(gbData);
+	$('#message').prepend(showGBnode(gbData));
 }
 
 function showGBnode(node){
 	console.log(node);
+	var res='';
 	for(var i in node){
 		console.log(node[i].child);
 		if(node[i].child.length>0){
@@ -39,8 +40,9 @@ function showGBnode(node){
 		}else{
 			var subnode='';
 		}
-		$('#message').prepend('<div style="margin-left:20px; border:#000 1px solid;"><p>'+node[i].uname+'</p><p>'+node[i].mess+'</p><p>'+node[i].date+'</p>'+subnode+'</div>');
+		res+='<div style="margin-left:20px; border:#000 1px solid;"><p>'+node[i].uname+'</p><p>'+node[i].mess+'</p><p>'+node[i].date+'</p>'+subnode+'</div>';
 	}
+	return res;
 }
 
 
