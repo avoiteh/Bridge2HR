@@ -4,31 +4,47 @@
 <title>Messenger</title>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+
+<script type="text/javascript" src="xml2json.min.js"></script>
+
 <script type="text/javascript">
+var gbData;
+
 function getMessage(){
 	$.ajax({
 		type: "GET",
-		dataType: "xml",
+		dataType: "json",
 		url: "message.php",
 		success: function(msg){
 			update(msg);
 		}
 	});
 }
-function update(msg){
-	console.log(msg);
 
-	var messagesNode = msg.getElementsByTagName('messages')[0];
-	var messageNode = messagesNode.getElementsByTagName("message");
-	if(messageNode)
-		for(var i=0; i<messageNode.length; i++){
-			var message = messageNode[i];
-			var text = message.getElementsByTagName("text")[0].childNodes[0].nodeValue;
-			var sender = message.getElementsByTagName("sender")[0].childNodes[0].nodeValue;
-			var date = message.getElementsByTagName("date")[0].childNodes[0].nodeValue;
-			$('#message').prepend('<div class="row"><div class="col-md-3">'+text+'</div><div class="col-md-3">'+sender+'</div><div class="col-md-3">'+date+'</div></div>');
-		}
+function update(msg){
+	gbData=msg;
+	showGB();
 }
+
+function showGB(){
+	showGBnode(gbData);
+}
+
+function showGBnode(node){
+	console.log(node);
+	for(var i in node){
+		console.log(node[i].child);
+		if(node[i].child.length>0){
+			var subnode=showGBnode(node[i].child);
+		}else{
+			var subnode='';
+		}
+		$('#message').prepend('<div style="margin-left:20px; border:#000 1px solid;"><p>'+node[i].uname+'</p><p>'+node[i].mess+'</p><p>'+node[i].date+'</p>'+subnode+'</div>');
+	}
+}
+
+
+
 </script>
 </head>
 <body>
