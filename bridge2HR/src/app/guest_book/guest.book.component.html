@@ -1,0 +1,13 @@
+<ul class="text-left">
+  <li *ngFor="let node of guestBookService.getData() | parent: parent">
+
+      <h6>{{node.date}}</h6>
+      <div [ngClass]="{
+        '': node.uid=='0',
+        'font-weight-bold': node.uid!='0'
+      }">{{node.uname}}</div>
+      <p>{{node.mess}}</p>
+
+    <guest-book [parent]="node.id"></guest-book>
+  </li>
+</ul>
