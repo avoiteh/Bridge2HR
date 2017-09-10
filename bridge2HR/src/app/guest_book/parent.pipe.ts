@@ -6,13 +6,14 @@ import { Pipe, PipeTransform } from '@angular/core';
 export class ParentPipe implements PipeTransform {
   transform(item: any , parent?: any): any {
   	let result:any = [];
-  	console.log(parent);
+    //console.log('ParentPipe', parent);
   	let j=0;
   	for(let i in item){
       if(item[i].parent == parent){
         result[result.length]=item[i];
       }
   	}
+    //console.log('result',result);
     return result;
   }
 }

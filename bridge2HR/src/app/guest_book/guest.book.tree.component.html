@@ -1,0 +1,17 @@
+<ul class="text-left">
+  <li *ngFor="let node of guestBookService.getData() | parent: parent" class="panel panel-warning">
+      <small>{{node.date}}</small>
+      <span>{{node.uname}}</span>
+      <span *ngIf="node.uid=='0'"> (anonymus)</span>
+      <p *ngIf="mokAuthService.user.uid!=node.uid">{{node.mess}}</p>
+      <textarea class="form-control" *ngIf="mokAuthService.user.uid==node.uid"  (input) = "changeAnswerMess($event.target.value);">{{node.mess}}</textarea>
+      <button *ngIf="mokAuthService.user.uid==node.uid" type="button" class="btn btn-success btn-xs" (click)="onClickSave(node.id)">Сохранить</button>
+      <button *ngIf="node.id!=guestBookService.currentAnswer" type="button" class="btn btn-success btn-xs" (click)="onClickAnswer(node.id)">Ответить</button>
+      <div *ngIf="node.id==guestBookService.currentAnswer">
+        {{mokAuthService.user.uname}}
+        <textarea class="form-control" (input) = "changeAnswerMess($event.target.value);"></textarea>
+        <button type="button" class="btn btn-success btn-xs" (click)="onClickSend(node.id)">Отправить</button>
+      </div>
+    <guest-book-tree [parent]="node.id"></guest-book-tree>
+  </li>
+</ul>
