@@ -1,21 +1,20 @@
 <?php
+header("Access-Control-Allow-Origin: *"); 
+header("Access-Control-Allow-Methods: GET, PUT, POST, DELETE, OPTIONS");
+header("Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token , Authorization");
+
 class guestBook{
 	private $data;
 	function __construct (){
-		$query = $_POST['query'];
+		$json = json_decode(file_get_contents('php://input'));
+		// if(isset($_POST['query'])){
+		// 	$query = $_POST['query'];
+		// }else{
+		// 	$query='';
+		// }
 		$this->loadFtomXML();
-		if($query){
-			//заткнём дыру ут некорректных данных
-			try {
-			    $json = json_decode($query);
-			} catch (Exception $e) {
-			    die('{"Error":"uncorrect JSON"}');
-			}
-			
-			// var_dump($json);
-			$max_id=-1;
+		if($json){
 			foreach ($this->data as $key => $value) {
-				if($value->id > $max_id){$max_id = $value->id;}
 				if($value->id == $json->id){
 					//если такой id нашёлся, значит надо сохранить
 					$this->data[$key]->mess = $json->mess;
@@ -23,12 +22,20 @@ class guestBook{
 					die('[{"id":"'.$value->id.'"}]');
 				}
 			}
-			$max_id++;
-			//id не нашёлся, значит надо добавить!
-			$json->id = $max_id;
-			array_push($this->data, $json);
+			// $max_id++;
+			// //id не нашёлся, значит надо добавить!
+			// $json->id = $max_id;
+			
+			$s='';
+			foreach ($this->data as $key => $value) {
+				$s.=serialize($value)."\n";
+			}
+			file_put_contents('test.txt', $s);
+
+			$this->data[]=$json;
+
 			$this->saveToXML();
-			die('[{"newId":"'.$max_id.'"}]');
+			die('[{"newId":"'.$json->id.'"}]');
 		}else{
 			echo json_encode($this->data);
 		}

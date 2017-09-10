@@ -6,6 +6,8 @@ import { GuestBookComponent } from './guest_book/guest.book.component';
 import { GuestBookTreeComponent } from './guest_book/guest.book.tree.component';
 import { ParentPipe} from './guest_book/parent.pipe';
 
+import { HttpModule }   from '@angular/http';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -14,7 +16,8 @@ import { ParentPipe} from './guest_book/parent.pipe';
 	ParentPipe
   ],
   imports: [
-    BrowserModule
+    BrowserModule,
+    HttpModule
   ],
   providers: [],
   bootstrap: [AppComponent]
